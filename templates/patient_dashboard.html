@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Reports - HeartCare AI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="app-layout">
+        <!-- Patient Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <span class="logo-icon">❤️</span>
+                    <span class="logo-text">HeartCare<span class="logo-ai">AI</span></span>
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="{{ url_for('patient_dashboard') }}" class="nav-item active">
+                    <span class="nav-icon">📊</span>
+                    <span>My Reports</span>
+                </a>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="user-info">
+                    <div class="user-avatar" style="background: linear-gradient(135deg, #10b981, #059669);">{{ patient.name[0] }}</div>
+                    <div class="user-details">
+                        <span class="user-name">{{ patient.name }}</span>
+                        <span class="user-role">Patient</span>
+                    </div>
+                </div>
+                <a href="{{ url_for('patient_logout') }}" class="nav-item logout-btn">
+                    <span class="nav-icon">🚪</span>
+                    <span>Logout</span>
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="top-bar">
+                <button class="menu-toggle" id="menuToggle" onclick="toggleSidebar()">☰</button>
+                <h1 class="page-title">📊 My Health Reports</h1>
+                <div class="top-bar-right">
+                    <span class="greeting">Welcome, {{ patient.name }}</span>
+                </div>
+            </header>
+
+            <!-- Flash Messages -->
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                <div class="flash-container">
+                    {% for category, message in messages %}
+                    <div class="flash-message flash-{{ category }}" onclick="this.remove()">
+                        <span>{{ message }}</span>
+                        <button class="flash-close">&times;</button>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            {% endwith %}
+
+            <div class="content-area">
+                <!-- Patient Info Card -->
+                <div class="stats-grid">
+                    <div class="stat-card stat-patients">
+                        <div class="stat-icon">👤</div>
+                        <div class="stat-info">
+                            <span class="stat-value">{{ patient.name }}</span>
+                            <span class="stat-label">{{ patient.age }}y / {{ 'Male' if patient.sex == 'M' else 'Female' }}</span>
+                        </div>
+                    </div>
+                    <div class="stat-card stat-predictions">
+                        <div class="stat-icon">🔬</div>
+                        <div class="stat-info">
+                            <span class="stat-value">{{ total_predictions }}</span>
+                            <span class="stat-label">Total Screenings</span>
+                        </div>
+                    </div>
+                    <div class="stat-card stat-healthy">
+                        <div class="stat-icon">✅</div>
+                        <div class="stat-info">
+                            <span class="stat-value">{{ healthy_count }}</span>
+                            <span class="stat-label">Healthy Results</span>
+                        </div>
+                    </div>
+                    <div class="stat-card stat-disease">
+                        <div class="stat-icon">⚠️</div>
+                        <div class="stat-info">
+                            <span class="stat-value">{{ disease_count }}</span>
+                            <span class="stat-label">Flagged Results</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Reports Table -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2>📋 Prediction History</h2>
+                        <span class="badge">{{ total_predictions }} records</span>
+                    </div>
+                    <div class="card-body">
+                        {% if predictions %}
+                        <div class="table-wrapper">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Report #</th>
+                                        <th>Date</th>
+                                        <th>Age</th>
+                                        <th>BP</th>
+                                        <th>Cholesterol</th>
+                                        <th>Max HR</th>
+                                        <th>Chest Pain</th>
+                                        <th>Result</th>
+                                        <th>Confidence</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for pred in predictions %}
+                                    <tr class="{% if pred.result == 1 %}row-danger{% else %}row-safe{% endif %}">
+                                        <td><span class="id-badge">#{{ pred.id }}</span></td>
+                                        <td>{{ pred.created_at.strftime('%b %d, %Y %H:%M') }}</td>
+                                        <td>{{ pred.age }}</td>
+                                        <td>{{ pred.resting_bp }} mm Hg</td>
+                                        <td>{{ pred.cholesterol }} mg/dl</td>
+                                        <td>{{ pred.max_hr }} bpm</td>
+                                        <td>{{ pred.chest_pain_type }}</td>
+                                        <td>
+                                            {% if pred.result == 1 %}
+                                            <span class="result-badge result-danger">⚠️ Risk Detected</span>
+                                            {% else %}
+                                            <span class="result-badge result-safe">✅ Healthy</span>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            <div class="mini-bar-container">
+                                                <div class="mini-bar {% if pred.result == 1 %}bar-danger{% else %}bar-safe{% endif %}" style="width: {{ (pred.probability * 100) if pred.result == 1 else ((1 - pred.probability) * 100) }}%"></div>
+                                            </div>
+                                            <span class="confidence-text">{{ "%.1f"|format(pred.probability * 100 if pred.result == 1 else (1 - pred.probability) * 100) }}%</span>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        {% else %}
+                        <div class="empty-state">
+                            <span class="empty-icon">📋</span>
+                            <h3>No reports yet</h3>
+                            <p>Your doctor hasn't run any heart disease screenings for you yet. Please visit your healthcare provider for a screening.</p>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Disclaimer -->
+                <div class="card" style="margin-top: 16px;">
+                    <div class="card-body" style="padding: 16px 24px;">
+                        <p style="font-size: 12px; color: var(--text-muted); margin: 0;">
+                            <strong>⚕️ Disclaimer:</strong> These predictions are generated by a machine learning model for screening purposes only.
+                            They are NOT a definitive medical diagnosis. Always consult with your healthcare provider for proper diagnosis and treatment.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>

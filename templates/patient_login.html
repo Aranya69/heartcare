@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}Patient Login - HeartCare AI{% endblock %}
+
+{% block auth_content %}
+<div class="auth-page">
+    <div class="auth-container">
+        <div class="auth-card">
+            <div class="auth-header">
+                <div class="auth-logo">
+                    <span class="logo-icon-lg">❤️</span>
+                    <h1>HeartCare<span class="logo-ai">AI</span></h1>
+                    <p class="auth-subtitle">Patient Portal — View Your Health Reports</p>
+                </div>
+            </div>
+            <form method="POST" action="{{ url_for('patient_login') }}" class="auth-form">
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" name="email" placeholder="Enter your email" required autocomplete="email">
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" placeholder="Enter your password" required autocomplete="current-password">
+                </div>
+                <button type="submit" class="btn btn-primary btn-full">
+                    Sign In as Patient
+                </button>
+            </form>
+            <div class="auth-footer">
+                <p>Don't have an account? <a href="{{ url_for('patient_register') }}">Register here</a></p>
+                <p style="margin-top: 12px; font-size: 12px;"><a href="{{ url_for('login') }}">Doctor/Staff Login →</a></p>
+            </div>
+        </div>
+        <div class="auth-info auth-info-patient">
+            <div class="auth-info-content">
+                <h2>Your Health, Your Data</h2>
+                <p>Access your heart disease screening results and prediction history from any device.</p>
+                <div class="feature-list">
+                    <div class="feature-item">
+                        <span class="feature-icon">📊</span>
+                        <span>View Predictions</span>
+                    </div>
+                    <div class="feature-item">
+                        <span class="feature-icon">📋</span>
+                        <span>Track History</span>
+                    </div>
+                    <div class="feature-item">
+                        <span class="feature-icon">🔒</span>
+                        <span>Secure Access</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

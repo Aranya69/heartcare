@@ -1,0 +1,143 @@
+{% extends "base.html" %}
+{% block title %}Dashboard - HeartCare AI{% endblock %}
+{% block page_title %}Dashboard{% endblock %}
+
+{% block content %}
+<!-- Stats Cards -->
+<div class="stats-grid">
+    <div class="stat-card stat-patients">
+        <div class="stat-icon">👥</div>
+        <div class="stat-info">
+            <span class="stat-value">{{ total_patients }}</span>
+            <span class="stat-label">Total Patients</span>
+        </div>
+    </div>
+    <div class="stat-card stat-predictions">
+        <div class="stat-icon">🔬</div>
+        <div class="stat-info">
+            <span class="stat-value">{{ total_predictions }}</span>
+            <span class="stat-label">Total Predictions</span>
+        </div>
+    </div>
+    <div class="stat-card stat-healthy">
+        <div class="stat-icon">✅</div>
+        <div class="stat-info">
+            <span class="stat-value">{{ healthy_count }}</span>
+            <span class="stat-label">Healthy Results</span>
+        </div>
+    </div>
+    <div class="stat-card stat-disease">
+        <div class="stat-icon">⚠️</div>
+        <div class="stat-info">
+            <span class="stat-value">{{ disease_count }}</span>
+            <span class="stat-label">Disease Detected</span>
+        </div>
+    </div>
+</div>
+
+<!-- Add Patient + Patient List -->
+<div class="dashboard-grid">
+    <!-- Add Patient Form -->
+    <div class="card">
+        <div class="card-header">
+            <h2>➕ Register New Patient</h2>
+        </div>
+        <div class="card-body">
+            <form method="POST" action="{{ url_for('add_patient') }}" id="addPatientForm">
+                <div class="form-group">
+                    <label for="patientName">Full Name</label>
+                    <input type="text" id="patientName" name="name" placeholder="Patient full name" required>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="patientAge">Age</label>
+                        <input type="number" id="patientAge" name="age" placeholder="Age" min="1" max="120" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="patientSex">Sex</label>
+                        <select id="patientSex" name="sex" required>
+                            <option value="">Select</option>
+                            <option value="M">Male</option>
+                            <option value="F">Female</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="patientPhone">Phone (optional)</label>
+                    <input type="text" id="patientPhone" name="phone" placeholder="Phone number">
+                </div>
+                <div class="form-divider">
+                    <span>Patient Login (Optional)</span>
+                </div>
+                <div class="form-group">
+                    <label for="patientEmail">Patient Email</label>
+                    <input type="email" id="patientEmail" name="patient_email" placeholder="patient@email.com">
+                </div>
+                <div class="form-group">
+                    <label for="patientPassword">Patient Password</label>
+                    <input type="password" id="patientPassword" name="patient_password" placeholder="Min 6 characters" minlength="6">
+                </div>
+                <button type="submit" class="btn btn-primary btn-full">Register Patient</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Patient List -->
+    <div class="card card-wide">
+        <div class="card-header">
+            <h2>👥 Your Patients</h2>
+            <span class="badge">{{ total_patients }} total</span>
+        </div>
+        <div class="card-body">
+            {% if patients %}
+            <div class="table-wrapper">
+                <table class="data-table" id="patientsTable">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Age</th>
+                            <th>Sex</th>
+                            <th>Phone</th>
+                            <th>Predictions</th>
+                            <th>Registered</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for patient in patients %}
+                        <tr>
+                            <td><span class="id-badge">#{{ patient.id }}</span></td>
+                            <td><strong>{{ patient.name }}</strong></td>
+                            <td>{{ patient.age }}</td>
+                            <td>
+                                <span class="sex-badge sex-{{ patient.sex|lower }}">
+                                    {{ 'Male' if patient.sex == 'M' else 'Female' }}
+                                </span>
+                            </td>
+                            <td>{{ patient.phone or '—' }}</td>
+                            <td><span class="badge">{{ patient.predictions|length }}</span></td>
+                            <td>{{ patient.created_at.strftime('%b %d, %Y') }}</td>
+                            <td class="actions-cell">
+                                <a href="{{ url_for('predict_page') }}?patient_id={{ patient.id }}" class="btn btn-sm btn-primary" title="Run Prediction">🔬</a>
+                                <a href="{{ url_for('history', patient_id=patient.id) }}" class="btn btn-sm btn-secondary" title="View History">📋</a>
+                                <form method="POST" action="{{ url_for('delete_patient', patient_id=patient.id) }}" style="display:inline;" onsubmit="return confirm('Delete patient {{ patient.name }}? This will also delete all their predictions.')">
+                                    <button type="submit" class="btn btn-sm btn-danger" title="Delete">🗑️</button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="empty-state">
+                <span class="empty-icon">👤</span>
+                <h3>No patients yet</h3>
+                <p>Register your first patient using the form on the left.</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

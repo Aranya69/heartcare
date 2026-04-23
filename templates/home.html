@@ -1,0 +1,217 @@
+{% extends "base.html" %}
+{% block title %}HeartCare AI — ML-Driven Heart Disease Detection{% endblock %}
+
+{% block auth_content %}
+<div class="home-page">
+    <!-- Navigation Bar -->
+    <nav class="home-nav">
+        <div class="home-nav-inner">
+            <div class="logo">
+                <span class="logo-icon">❤️</span>
+                <span class="logo-text">HeartCare<span class="logo-ai">AI</span></span>
+            </div>
+            <div class="home-nav-links">
+                <a href="#features" class="home-link">Features</a>
+                <a href="#how-it-works" class="home-link">How It Works</a>
+                <a href="#tech" class="home-link">Technology</a>
+                <a href="{{ url_for('login') }}" class="btn btn-secondary btn-sm">Doctor Login</a>
+                <a href="{{ url_for('patient_login') }}" class="btn btn-primary btn-sm">Patient Portal</a>
+            </div>
+            <button class="home-menu-btn" id="homeMenuBtn" onclick="document.querySelector('.home-nav-links').classList.toggle('open')">☰</button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-bg-effects">
+            <div class="hero-orb hero-orb-1"></div>
+            <div class="hero-orb hero-orb-2"></div>
+            <div class="hero-orb hero-orb-3"></div>
+        </div>
+        <div class="hero-content">
+            <div class="hero-badge">
+                <span class="hero-badge-dot"></span>
+                AI-Powered Cardiac Analysis
+            </div>
+            <h1 class="hero-title">
+                Detect Heart Disease<br>
+                <span class="hero-gradient-text">Before It's Too Late</span>
+            </h1>
+            <p class="hero-desc">
+                An intelligent clinical decision support system powered by PyTorch deep learning.
+                Analyze 11 medical parameters in seconds and get accurate risk assessments for your patients.
+            </p>
+            <div class="hero-actions">
+                <a href="{{ url_for('login') }}" class="btn btn-primary btn-lg">
+                    🩺 Doctor Portal
+                </a>
+                <a href="{{ url_for('patient_login') }}" class="btn btn-secondary btn-lg">
+                    👤 Patient Portal
+                </a>
+            </div>
+            <div class="hero-stats">
+                <div class="hero-stat">
+                    <span class="hero-stat-value">11</span>
+                    <span class="hero-stat-label">Clinical Parameters</span>
+                </div>
+                <div class="hero-stat-divider"></div>
+                <div class="hero-stat">
+                    <span class="hero-stat-value">~90%</span>
+                    <span class="hero-stat-label">Model Accuracy</span>
+                </div>
+                <div class="hero-stat-divider"></div>
+                <div class="hero-stat">
+                    <span class="hero-stat-value">&lt;1s</span>
+                    <span class="hero-stat-label">Prediction Time</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="home-section" id="features">
+        <div class="section-inner">
+            <div class="section-header">
+                <span class="section-tag">Features</span>
+                <h2 class="section-title">Everything You Need for <span class="hero-gradient-text">Cardiac Care</span></h2>
+                <p class="section-desc">A comprehensive platform for doctors and patients to manage heart health with AI-driven insights.</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-card-icon">🧠</div>
+                    <h3>ML-Powered Prediction</h3>
+                    <p>PyTorch neural network trained on clinical heart disease data provides accurate risk assessment in real time.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-card-icon">👨‍⚕️</div>
+                    <h3>Doctor Dashboard</h3>
+                    <p>Manage patients, run predictions, and review comprehensive diagnostic history — all from one intuitive panel.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-card-icon">👤</div>
+                    <h3>Patient Portal</h3>
+                    <p>Patients can log in to securely view their prediction results and health reports shared by their doctor.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-card-icon">📊</div>
+                    <h3>Real-Time Analytics</h3>
+                    <p>Visual dashboard with live stats — total patients, predictions made, disease vs. healthy breakdowns.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-card-icon">🔒</div>
+                    <h3>Secure & Private</h3>
+                    <p>Role-based access control with hashed passwords. Doctors and patients each have their own secure portals.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-card-icon">📋</div>
+                    <h3>Prediction History</h3>
+                    <p>Full audit trail of every prediction — filter by patient, view confidence scores, and track health trends.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="home-section home-section-alt" id="how-it-works">
+        <div class="section-inner">
+            <div class="section-header">
+                <span class="section-tag">How It Works</span>
+                <h2 class="section-title">Three Simple Steps to <span class="hero-gradient-text">Save Lives</span></h2>
+            </div>
+            <div class="steps-grid">
+                <div class="step-card">
+                    <div class="step-number">01</div>
+                    <h3>Register & Add Patient</h3>
+                    <p>Create your doctor account and register your patients into the system with their basic information.</p>
+                </div>
+                <div class="step-connector">→</div>
+                <div class="step-card">
+                    <div class="step-number">02</div>
+                    <h3>Enter Clinical Data</h3>
+                    <p>Input 11 clinical parameters including chest pain type, blood pressure, cholesterol, and ECG results.</p>
+                </div>
+                <div class="step-connector">→</div>
+                <div class="step-card">
+                    <div class="step-number">03</div>
+                    <h3>Get AI Prediction</h3>
+                    <p>Receive instant heart disease risk assessment with confidence score and save the result to patient history.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Technology Section -->
+    <section class="home-section" id="tech">
+        <div class="section-inner">
+            <div class="section-header">
+                <span class="section-tag">Technology</span>
+                <h2 class="section-title">Built with <span class="hero-gradient-text">Modern Stack</span></h2>
+            </div>
+            <div class="tech-grid">
+                <div class="tech-card">
+                    <div class="tech-icon">🐍</div>
+                    <span class="tech-name">Python Flask</span>
+                    <span class="tech-role">Web Framework</span>
+                </div>
+                <div class="tech-card">
+                    <div class="tech-icon">🔥</div>
+                    <span class="tech-name">PyTorch</span>
+                    <span class="tech-role">Deep Learning</span>
+                </div>
+                <div class="tech-card">
+                    <div class="tech-icon">🗄️</div>
+                    <span class="tech-name">SQLite</span>
+                    <span class="tech-role">Database</span>
+                </div>
+                <div class="tech-card">
+                    <div class="tech-icon">📐</div>
+                    <span class="tech-name">Scikit-learn</span>
+                    <span class="tech-role">Data Processing</span>
+                </div>
+                <div class="tech-card">
+                    <div class="tech-icon">📊</div>
+                    <span class="tech-name">Pandas</span>
+                    <span class="tech-role">Data Analysis</span>
+                </div>
+                <div class="tech-card">
+                    <div class="tech-icon">🎨</div>
+                    <span class="tech-name">CSS3</span>
+                    <span class="tech-role">Premium Dark UI</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="home-cta">
+        <div class="section-inner">
+            <div class="cta-content">
+                <h2>Ready to Protect Hearts with AI?</h2>
+                <p>Join HeartCare AI and start making data-driven cardiac assessments today.</p>
+                <div class="hero-actions" style="margin-top: 32px;">
+                    <a href="{{ url_for('register') }}" class="btn btn-primary btn-lg">
+                        🚀 Register as Doctor
+                    </a>
+                    <a href="{{ url_for('patient_register') }}" class="btn btn-secondary btn-lg">
+                        📝 Register as Patient
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="home-footer">
+        <div class="section-inner">
+            <div class="footer-inner">
+                <div class="logo">
+                    <span class="logo-icon">❤️</span>
+                    <span class="logo-text">HeartCare<span class="logo-ai">AI</span></span>
+                </div>
+                <p class="footer-text">ML-Driven Heart Disease Detection & Patient Management System</p>
+                <p class="footer-copy">© 2026 HeartCare AI — Final Year Web Lab Project</p>
+            </div>
+        </div>
+    </footer>
+</div>
+{% endblock %}

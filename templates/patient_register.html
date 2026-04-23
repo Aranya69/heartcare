@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% block title %}Patient Registration - HeartCare AI{% endblock %}
+
+{% block auth_content %}
+<div class="auth-page">
+    <div class="auth-container">
+        <div class="auth-card">
+            <div class="auth-header">
+                <div class="auth-logo">
+                    <span class="logo-icon-lg">❤️</span>
+                    <h1>HeartCare<span class="logo-ai">AI</span></h1>
+                    <p class="auth-subtitle">Create your patient account</p>
+                </div>
+            </div>
+            <form method="POST" action="{{ url_for('patient_register') }}" class="auth-form" id="registerForm">
+                <div class="form-group">
+                    <label for="full_name">Full Name</label>
+                    <input type="text" id="full_name" name="full_name" placeholder="Your full name" required>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="age">Age</label>
+                        <input type="number" id="age" name="age" placeholder="Your age" min="1" max="120" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="sex">Sex</label>
+                        <select id="sex" name="sex" required>
+                            <option value="">Select</option>
+                            <option value="M">Male</option>
+                            <option value="F">Female</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="phone">Phone (optional)</label>
+                    <input type="text" id="phone" name="phone" placeholder="Phone number">
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" placeholder="your@email.com" required>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" name="password" placeholder="Min 6 characters" required minlength="6" autocomplete="new-password">
+                    </div>
+                    <div class="form-group">
+                        <label for="confirm_password">Confirm Password</label>
+                        <input type="password" id="confirm_password" name="confirm_password" placeholder="Repeat password" required autocomplete="new-password">
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary btn-full">
+                    Create Patient Account
+                </button>
+            </form>
+            <div class="auth-footer">
+                <p>Already have an account? <a href="{{ url_for('patient_login') }}">Sign in here</a></p>
+                <p style="margin-top: 12px; font-size: 12px;"><a href="{{ url_for('register') }}">Doctor/Staff Registration →</a></p>
+            </div>
+        </div>
+        <div class="auth-info auth-info-patient">
+            <div class="auth-info-content">
+                <h2>Join HeartCare AI</h2>
+                <p>Register to access your heart disease screening results and track your health over time.</p>
+                <div class="feature-list">
+                    <div class="feature-item">
+                        <span class="feature-icon">📊</span>
+                        <span>View Your Reports</span>
+                    </div>
+                    <div class="feature-item">
+                        <span class="feature-icon">🕐</span>
+                        <span>Track Over Time</span>
+                    </div>
+                    <div class="feature-item">
+                        <span class="feature-icon">🔒</span>
+                        <span>Private & Secure</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
