@@ -1,0 +1,3 @@
+PassengerEnabled On
+PassengerAppRoot /home/yourusername/WebLab_Final_Project
+PassengerPython /home/yourusername/virtualenv/WebLab_Final_Project/3.9/bin/python3
